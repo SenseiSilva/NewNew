@@ -1,30 +1,45 @@
-$(document).ready(function () {
+countHours = null
+countMinutes = null
+countSeconds = null
 
-  function second_passed() {
-    $('.clock').removeClass('is-off');
-  }
-  setTimeout(second_passed, 2000)
+h = $(".hours span")
+m = $(".minutes span")
+s = $(".seconds span")
 
-  $('.switcher').on('click', function(e) {
-    e.preventDefault();
-    $('.screen').toggleClass('glitch');
-  });
+setInterval ->
+	date = new Date()
+	nowHours = date.getHours()
+	nowMinutes = date.getMinutes()
+	nowSeconds = date.getSeconds()
+	
+	if countSeconds != nowSeconds
+		s.addClass "pop"
+		setTimeout ->
+			s.removeClass "pop"
+		, 300
+		countSeconds = 60 - nowSeconds
+		if nowSeconds == 0
+			countSeconds = 0
+		s.text (if countSeconds < 10 then "0" else "") + countSeconds
 
+	if countMinutes != nowMinutes && nowSeconds != 0 || countMinutes == null
+		m.addClass "pop"
+		setTimeout ->
+			m.removeClass "pop"
+		, 300
+		countMinutes = 59 - nowMinutes
+		if nowMinutes == 0
+			countMinutes = 59
+		m.text (if countMinutes < 10 then "0" else "") + countMinutes
+		countMinutes = nowMinutes
 
-  var newDate = new Date();
-  newDate.setDate(newDate.getDate());
+	if countHours != nowHours && nowMinutes == 0 && nowSeconds == 1 || countHours == null
+		h.addClass "pop"
+		setTimeout ->
+			h.removeClass "pop"
+		, 300
+		countHours = 23 - nowHours
+		h.text (if countHours < 10 then "0" else "") + countHours
+		countHours = nowHours
 
-  setInterval( function() {
-
-    var hours    = new Date().getHours();
-    var seconds  = new Date().getSeconds();
-    var minutes  = new Date().getMinutes();
-
-    var realTime = ( hours < 10 ? '0' : '' ) + hours + ' : ' + ( minutes < 10 ? '0' : '' ) + minutes + ' : ' + ( seconds < 10 ? '0' : '' ) + seconds
-
-    $('.time').html(realTime);
-    $('.time').attr('data-time', realTime);
-
-  }, 1000);
-
-});
+, 1000
