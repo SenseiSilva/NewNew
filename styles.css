@@ -69,3 +69,7 @@ nav{
             left: 100%; 
             top:0;
           }	
+a href{
+    text-decoration: underline wavy red;
+    text-decoration: none
+}
